@@ -1,0 +1,20 @@
+# Review Pulse — locked to the light theme.
+# The custom CSS in styles.py assumes light colors; the built-in theme
+# switcher (which could flip the app to dark and break it) is removed.
+[theme]
+base = "light"
+primaryColor = "#00B386"
+backgroundColor = "#F6F8F9"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#101828"
+
+[client]
+# "minimal" keeps the toolbar menu (so the fullscreen option is available for
+# screen recording) but hides the developer menu items. The theme switcher is
+# still disabled separately below, so dark mode cannot break the custom CSS.
+# Note: "hidden" is not a valid value in this Streamlit version.
+toolbarMode = "minimal"
+
+[ui]
+# Remove the "Deploy" / developer toolbar clutter; keeps the menu tidy.
+hideTopBar = false

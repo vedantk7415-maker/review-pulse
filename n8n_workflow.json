@@ -1,0 +1,86 @@
+{
+  "name": "Groww Weekly Pulse (approval-gated)",
+  "_comment": "Reference copy of the webhook fallback workflow. Replace every YOUR_* placeholder with your own values before importing into n8n. The live instance also has a second workflow ('Review Pulse (MCP tools)') exposing append_to_doc / create_email_draft over an MCP Server Trigger; the app prefers that and falls back to this webhook.",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pulse",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "b1f4a2c0-0000-4000-8000-000000000001",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "pulse"
+    },
+    {
+      "parameters": {
+        "resource": "document",
+        "operation": "update",
+        "documentURL": "YOUR_GOOGLE_DOC_ID",
+        "simple": true,
+        "actionsUi": {
+          "actionFields": [
+            {
+              "object": "text",
+              "action": "insert",
+              "locationChoice": "endOfSegmentLocation",
+              "insertSegment": "body",
+              "text": "={{ $json.body.doc_entry }}\n\n"
+            }
+          ]
+        },
+        "updateFields": {}
+      },
+      "id": "b1f4a2c0-0000-4000-8000-000000000002",
+      "name": "Google Docs",
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [220, 0],
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "YOUR_GOOGLE_DOCS_CREDENTIAL_ID",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "operation": "create",
+        "subject": "={{ $('Webhook').item.json.body.email_subject }}",
+        "emailType": "text",
+        "message": "={{ $('Webhook').item.json.body.email_body }}",
+        "options": {
+          "sendTo": "YOUR_EMAIL@example.com"
+        }
+      },
+      "id": "b1f4a2c0-0000-4000-8000-000000000003",
+      "name": "Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [440, 0],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Google Docs", "type": "main", "index": 0 }]]
+    },
+    "Google Docs": {
+      "main": [[{ "node": "Gmail", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

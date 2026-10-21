@@ -1,0 +1,32 @@
+# Secrets — never commit
+.env
+.streamlit/secrets.toml
+
+# Local app state
+history.json
+
+# Local editor / agent config (contains your own instance URL)
+opencode.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Screen recordings / media (demo videos are not part of the app)
+linkdin post/
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.wav
+
+# Local helper scripts (one-click tooling, not part of the app)
+Push to GitHub.bat
+Clear old GitHub login.bat
+push_to_github.ps1
